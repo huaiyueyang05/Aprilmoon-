@@ -55,7 +55,7 @@
             padding: 0 20px;
         }
 
-        /* 时间轴卡片（结合1的风格与2的布局） */
+        /* 时间轴卡片 */
         .timeline-item {
             background-color: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -118,6 +118,43 @@
             object-fit: cover;
             border-radius: 4px;
             opacity: 0.9;
+        }
+
+        /* 分页器样式 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin: 50px 0 20px;
+        }
+
+        .page-btn {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            padding: 8px 14px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+
+        .page-btn:hover:not(:disabled) {
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+        }
+
+        .page-btn.active {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+            color: #121212;
+            font-weight: 500;
+        }
+
+        .page-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
         }
 
         /* 弹窗遮罩 */
@@ -187,9 +224,9 @@
             color: var(--text-muted);
             font-size: 0.8rem;
             border-top: 1px solid var(--border-color);
+            margin-top: 40px;
         }
 
-        /* 响应式调整适配小屏幕 */
         @media(max-width: 768px) {
             .timeline-top-row {
                 grid-template-columns: 1fr;
@@ -205,7 +242,12 @@
         <div class="subtitle">在黑暗中跳动的心脏叫作月亮</div>
     </header>
 
-    <div class="container" id="timeline"></div>
+    <div class="container">
+        <!-- 演出列表容器 -->
+        <div id="timeline"></div>
+        <!-- 底部分页按钮容器 -->
+        <div class="pagination" id="pagination"></div>
+    </div>
 
     <!-- 弹窗结构 -->
     <div class="modal-overlay" id="modal">
@@ -224,93 +266,238 @@
 
 <script>
 // ======================
-// 演出列表：在此处管理您的演出及图片
-// 提示：如需添加多张图片，在 images 数组中继续用英文逗号分隔添加直链即可。
+// 演出列表数据（每页展示10条，目前共21条，会自动分为3页）
 // ======================
 const shows = [
     {
         date: "2026-08-09",
         band: "飞行冠军",
-        venue: "福州 Livehouse",
+        venue: "临沂 老橡树Livehouse",
         thumb: "https://i.postimg.cc/RZDHVkq3/IMG-20260819-184144.jpg",
-        images: [
-            "https://i.postimg.cc/RZDHVkq3/IMG-20260819-184144.jpg"
-        ]
+        images: ["https://i.postimg.cc/RZDHVkq3/IMG-20260819-184144.jpg,https://i.postimg.cc/MpFQKCXv/Walk-Color-Weave-1786707045326.png"]
     },
     {
         date: "2026-07-27",
         band: "来福乐队",
         venue: "福州 Livehouse",
         thumb: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=1000&q=80",
-        images: [
-            "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=1000&q=80"
-        ]
+        images: ["https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=1000&q=80"]
     },
     {
         date: "2026-07-05",
         band: "花墙乐队",
-        venue: "福州 Livehouse",
+        venue: "福州 Livehouse（收官场）",
         thumb: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=1000&q=80",
-        images: [
-            "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=1000&q=80"
-        ]
+        images: ["https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=1000&q=80"]
     },
     {
         date: "2026-07-04",
-        band: "败犬乐队",
+        band: "败犬乐队 pt.2",
         venue: "福州 Livehouse",
         thumb: "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=1000&q=80",
-        images: [
-            "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=1000&q=80"
-        ]
+        images: ["https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=1000&q=80"]
+    },
+    {
+        date: "2026-07-04",
+        band: "败犬乐队 pt.1",
+        venue: "福州 Livehouse",
+        thumb: "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=1000&q=80",
+        images: ["https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=1000&q=80"]
     },
     {
         date: "2026-06-29",
         band: "老油条",
         venue: "福州 Livehouse",
         thumb: "https://images.unsplash.com/photo-1526478806334-5fd488fcaabc?auto=format&fit=crop&w=1000&q=80",
-        images: [
-            "https://images.unsplash.com/photo-1526478806334-5fd488fcaabc?auto=format&fit=crop&w=1000&q=80"
-        ]
+        images: ["https://images.unsplash.com/photo-1526478806334-5fd488fcaabc?auto=format&fit=crop&w=1000&q=80"]
+    },
+    {
+        date: "2026-06-27",
+        band: "落水泥人",
+        venue: "福州 Livehouse",
+        thumb: "https://images.unsplash.com/photo-1465847899084-d164df4dedc6?auto=format&fit=crop&w=1000&q=80",
+        images: ["https://images.unsplash.com/photo-1465847899084-d164df4dedc6?auto=format&fit=crop&w=1000&q=80"]
+    },
+    {
+        date: "2026-06-27",
+        band: "波动卡带",
+        venue: "福州 Livehouse",
+        thumb: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=1000&q=80",
+        images: ["https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=1000&q=80"]
+    },
+    {
+        date: "2026-06-21",
+        band: "始于明天",
+        venue: "福州 Livehouse",
+        thumb: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=1000&q=80",
+        images: ["https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=1000&q=80"]
+    },
+    {
+        date: "2026-06-20",
+        band: "惊蛰",
+        venue: "福州 Livehouse",
+        thumb: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=1000&q=80",
+        images: ["https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=1000&q=80"]
+    },
+    {
+        date: "2026-06-13",
+        band: "Whetherday",
+        venue: "福州 Livehouse",
+        thumb: "https://images.unsplash.com/photo-1526478806334-5fd488fcaabc?auto=format&fit=crop&w=1000&q=80",
+        images: ["https://images.unsplash.com/photo-1526478806334-5fd488fcaabc?auto=format&fit=crop&w=1000&q=80"]
     },
     {
         date: "2026-05-29",
         band: "帆布小镇",
         venue: "福州 Livehouse",
         thumb: "https://images.unsplash.com/photo-1465847899084-d164df4dedc6?auto=format&fit=crop&w=1000&q=80",
-        images: [
-            "https://images.unsplash.com/photo-1465847899084-d164df4dedc6?auto=format&fit=crop&w=1000&q=80"
-        ]
+        images: ["https://images.unsplash.com/photo-1465847899084-d164df4dedc6?auto=format&fit=crop&w=1000&q=80"]
+    },
+    {
+        date: "2026-05-23",
+        band: "秘密行动",
+        venue: "福州 Livehouse",
+        thumb: "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=1000&q=80",
+        images: ["https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=1000&q=80"]
+    },
+    {
+        date: "2026-05-22",
+        band: "东南不锈钢",
+        venue: "福州 Livehouse",
+        thumb: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=1000&q=80",
+        images: ["https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=1000&q=80"]
+    },
+    {
+        date: "2026-05-21",
+        band: "性格缺失",
+        venue: "福州 Livehouse",
+        thumb: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=1000&q=80",
+        images: ["https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=1000&q=80"]
+    },
+    {
+        date: "2026-05-16",
+        band: "风子",
+        venue: "福州 Livehouse",
+        thumb: "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=1000&q=80",
+        images: ["https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=1000&q=80"]
+    },
+    {
+        date: "2026-05-08",
+        band: "T.L.P.",
+        venue: "福州 Livehouse",
+        thumb: "https://images.unsplash.com/photo-1526478806334-5fd488fcaabc?auto=format&fit=crop&w=1000&q=80",
+        images: ["https://images.unsplash.com/photo-1526478806334-5fd488fcaabc?auto=format&fit=crop&w=1000&q=80"]
+    },
+    {
+        date: "2026-05-03",
+        band: "水线游",
+        venue: "福州 Livehouse",
+        thumb: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=1000&q=80",
+        images: ["https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=1000&q=80"]
+    },
+    {
+        date: "2026-04-18",
+        band: "时过夏末 · 雨是悲欢离合",
+        venue: "福州 Livehouse",
+        thumb: "https://images.unsplash.com/photo-1465847899084-d164df4dedc6?auto=format&fit=crop&w=1000&q=80",
+        images: ["https://images.unsplash.com/photo-1465847899084-d164df4dedc6?auto=format&fit=crop&w=1000&q=80"]
+    },
+    {
+        date: "2026-04-12",
+        band: "粮仓乐队 ｜ 春日未鸣的花",
+        venue: "福州 Livehouse",
+        thumb: "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=1000&q=80",
+        images: ["https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=1000&q=80"]
+    },
+    {
+        date: "2026-04-05",
+        band: "TC乔安娜",
+        venue: "福州 Livehouse",
+        thumb: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=1000&q=80",
+        images: ["https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=1000&q=80"]
     }
 ];
 
+const pageSize = 10; // 每页显示的演出数量
+let currentPage = 1;  // 默认初始页码
+
 const timelineEl = document.getElementById('timeline');
+const paginationEl = document.getElementById('pagination');
 
-shows.forEach((item, idx) => {
-    const div = document.createElement('div');
-    div.className = 'timeline-item';
-    div.innerHTML = `
-        <div class="timeline-top-row">
-            <div class="time">${item.date}</div>
-            <div class="band">${item.band}</div>
-            <div class="venue">${item.venue}</div>
-            <div>
-                <button class="btn-more" data-index="${idx}">More</button>
+// 渲染当前页的数据和页码
+function renderPage(page) {
+    currentPage = page;
+    timelineEl.innerHTML = '';
+
+    // 计算当前页的数据切片
+    const start = (page - 1) * pageSize;
+    const end = start + pageSize;
+    const pageShows = shows.slice(start, end);
+
+    // 渲染当前页的演出条目
+    pageShows.forEach((item, index) => {
+        const globalIdx = start + index; // 获取原数组中的真实索引
+        const div = document.createElement('div');
+        div.className = 'timeline-item';
+        div.innerHTML = `
+            <div class="timeline-top-row">
+                <div class="time">${item.date}</div>
+                <div class="band">${item.band}</div>
+                <div class="venue">${item.venue}</div>
+                <div>
+                    <button class="btn-more" data-index="${globalIdx}">More</button>
+                </div>
             </div>
-        </div>
-        <div class="thumb-wrap">
-            <img class="thumb" src="${item.thumb}" loading="lazy" alt="${item.band}">
-        </div>
-    `;
-    timelineEl.appendChild(div);
-});
+            <div class="thumb-wrap">
+                <img class="thumb" src="${item.thumb}" loading="lazy" alt="${item.band}">
+            </div>
+        `;
+        timelineEl.appendChild(div);
+    });
 
+    renderPagination();
+    window.scrollTo({ top: 0, behavior: 'smooth' }); // 翻页时平滑滚动回顶部
+}
+
+// 渲染底部分页栏
+function renderPagination() {
+    paginationEl.innerHTML = '';
+    const totalPages = Math.ceil(shows.length / pageSize);
+
+    if (totalPages <= 1) return; // 如果只有一页则不显示分页栏
+
+    // 上一页按钮
+    const prevBtn = document.createElement('button');
+    prevBtn.className = 'page-btn';
+    prevBtn.textContent = '上一页';
+    prevBtn.disabled = currentPage === 1;
+    prevBtn.onclick = () => renderPage(currentPage - 1);
+    paginationEl.appendChild(prevBtn);
+
+    // 数字页码按钮
+    for (let i = 1; i <= totalPages; i++) {
+        const pageBtn = document.createElement('button');
+        pageBtn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
+        pageBtn.textContent = i;
+        pageBtn.onclick = () => renderPage(i);
+        paginationEl.appendChild(pageBtn);
+    }
+
+    // 下一页按钮
+    const nextBtn = document.createElement('button');
+    nextBtn.className = 'page-btn';
+    nextBtn.textContent = '下一页';
+    nextBtn.disabled = currentPage === totalPages;
+    nextBtn.onclick = () => renderPage(currentPage + 1);
+    paginationEl.appendChild(nextBtn);
+}
+
+// 弹窗逻辑
 const modal = document.getElementById('modal');
 const gallery = document.getElementById('gallery');
 const modalTitle = document.getElementById('modal-title');
 const closeBtn = document.getElementById('close');
 
-// 点击 More 弹窗显示大图
 document.addEventListener('click', function(e){
     if(e.target.classList.contains('btn-more')){
         const idx = parseInt(e.target.getAttribute('data-index'));
@@ -330,7 +517,6 @@ document.addEventListener('click', function(e){
     }
 });
 
-// 关闭弹窗
 closeBtn.onclick = () => {
     modal.style.display = 'none';
     document.body.style.overflow = '';
@@ -342,6 +528,9 @@ modal.onclick = (e) => {
         document.body.style.overflow = '';
     }
 };
+
+// 初始化加载第一页
+renderPage(1);
 </script>
 </body>
 </html>
