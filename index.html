@@ -106,18 +106,25 @@
             background: rgba(197, 168, 128, 0.05);
         }
 
-        /* 缩略图样式 */
+        /* 缩略图样式：自适应通栏 + 3:2 比例 */
         .thumb-wrap {
             width: 100%;
             margin-top: 15px;
+            aspect-ratio: 3 / 2; /* 强制设定 3:2 比例 */
+            overflow: hidden;
+            border-radius: 4px;
         }
 
         .thumb {
             width: 100%;
-            height: 220px;
-            object-fit: cover;
-            border-radius: 4px;
+            height: 100%;
+            object-fit: cover; /* 保证图片不变形铺满容器 */
             opacity: 0.9;
+            transition: opacity 0.3s;
+        }
+
+        .thumb:hover {
+            opacity: 1;
         }
 
         /* 分页器样式 */
@@ -266,7 +273,7 @@
 
 <script>
 // ======================
-// 演出列表数据（每页展示10条，目前共21条，会自动分为3页）
+// 演出列表数据
 // ======================
 const shows = [
     {
@@ -274,7 +281,8 @@ const shows = [
         band: "飞行冠军",
         venue: "临沂 老橡树Livehouse",
         thumb: "https://i.postimg.cc/RZDHVkq3/IMG-20260819-184144.jpg",
-        images: ["https://i.postimg.cc/RZDHVkq3/IMG-20260819-184144.jpg,https://i.postimg.cc/MpFQKCXv/Walk-Color-Weave-1786707045326.png"]
+        images: ["https://i.postimg.cc/RZDHVkq3/IMG-20260819-184144.jpg",
+                "https://i.postimg.cc/MpFQKCXv/Walk-Color-Weave-1786707045326.png"]
     },
     {
         date: "2026-07-27",
@@ -418,25 +426,22 @@ const shows = [
     }
 ];
 
-const pageSize = 10; // 每页显示的演出数量
-let currentPage = 1;  // 默认初始页码
+const pageSize = 10;
+let currentPage = 1;
 
 const timelineEl = document.getElementById('timeline');
 const paginationEl = document.getElementById('pagination');
 
-// 渲染当前页的数据和页码
 function renderPage(page) {
     currentPage = page;
     timelineEl.innerHTML = '';
 
-    // 计算当前页的数据切片
     const start = (page - 1) * pageSize;
     const end = start + pageSize;
     const pageShows = shows.slice(start, end);
 
-    // 渲染当前页的演出条目
     pageShows.forEach((item, index) => {
-        const globalIdx = start + index; // 获取原数组中的真实索引
+        const globalIdx = start + index;
         const div = document.createElement('div');
         div.className = 'timeline-item';
         div.innerHTML = `
@@ -456,17 +461,15 @@ function renderPage(page) {
     });
 
     renderPagination();
-    window.scrollTo({ top: 0, behavior: 'smooth' }); // 翻页时平滑滚动回顶部
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-// 渲染底部分页栏
 function renderPagination() {
     paginationEl.innerHTML = '';
     const totalPages = Math.ceil(shows.length / pageSize);
 
-    if (totalPages <= 1) return; // 如果只有一页则不显示分页栏
+    if (totalPages <= 1) return;
 
-    // 上一页按钮
     const prevBtn = document.createElement('button');
     prevBtn.className = 'page-btn';
     prevBtn.textContent = '上一页';
@@ -474,7 +477,6 @@ function renderPagination() {
     prevBtn.onclick = () => renderPage(currentPage - 1);
     paginationEl.appendChild(prevBtn);
 
-    // 数字页码按钮
     for (let i = 1; i <= totalPages; i++) {
         const pageBtn = document.createElement('button');
         pageBtn.className = `page-btn ${i === currentPage ? 'active' : ''}`;
@@ -483,7 +485,6 @@ function renderPagination() {
         paginationEl.appendChild(pageBtn);
     }
 
-    // 下一页按钮
     const nextBtn = document.createElement('button');
     nextBtn.className = 'page-btn';
     nextBtn.textContent = '下一页';
@@ -492,7 +493,6 @@ function renderPagination() {
     paginationEl.appendChild(nextBtn);
 }
 
-// 弹窗逻辑
 const modal = document.getElementById('modal');
 const gallery = document.getElementById('gallery');
 const modalTitle = document.getElementById('modal-title');
@@ -529,7 +529,6 @@ modal.onclick = (e) => {
     }
 };
 
-// 初始化加载第一页
 renderPage(1);
 </script>
 </body>
