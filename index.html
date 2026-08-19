@@ -1,328 +1,347 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Live Photography Portfolio</title>
-<style>
-*{margin:0;padding:0;box-sizing:border-box}
-body{
-  background:#0b0b0d;
-  color:#e2e2e2;
-  font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
-  line-height:1.6;
-}
-.container{
-  max-width:1200px;
-  margin:0 auto;
-  padding:60px 24px;
-}
-h1{
-  font-weight:300;
-  font-size:28px;
-  letter-spacing:2px;
-  margin-bottom:48px;
-  color:#fff;
-}
-/* 时间轴条目，图片放下方 */
-.timeline-item{
-  padding:28px 0;
-  border-bottom:1px solid #222;
-}
-.timeline-top-row{
-  display:grid;
-  grid-template-columns:160px 1fr 160px 110px;
-  gap:18px;
-  align-items:center;
-  margin-bottom:16px;
-}
-.time{color:#888}
-.band{font-size:18px;color:#fff}
-.venue{color:#aaa;font-size:15px}
-.btn-more{
-  border:1px solid #444;
-  background:transparent;
-  color:#ccc;
-  padding:10px 14px;
-  cursor:pointer;
-  transition:0.25s;
-}
-.btn-more:hover{
-  border-color:#999;
-  color:#fff;
-}
-/* 下方大图缩略图 */
-.thumb-wrap{
-  width:100%;
-}
-.thumb{
-  width:100%;
-  height:180px;
-  object-fit:cover;
-  border-radius:6px;
-  opacity:0.9;
-}
-/* 弹窗遮罩 */
-.modal-overlay{
-  position:fixed;inset:0;
-  background:rgba(0,0,0,0.94);
-  z-index:999;
-  display:none;
-  overflow-y:auto;
-}
-.modal-wrap{
-  max-width:1400px;
-  margin:48px auto;
-  padding:0 22px;
-}
-.modal-header{
-  display:flex;justify-content:space-between;align-items:center;
-  margin-bottom:28px;
-}
-.modal-title{font-size:21px;font-weight:300}
-.close{
-  color:#aaa;font-size:30px;cursor:pointer;
-}
-/* 瀑布流 masonry */
-.waterfall{
-  column-count:3;
-  column-gap:16px;
-}
-@media(max-width:960px){.waterfall{column-count:2}}
-@media(max-width:550px){.waterfall{column-count:1}}
-.waterfall-item{
-  break-inside:avoid;
-  margin-bottom:16px;
-}
-.waterfall-item img{
-  width:100%;
-  display:block;
-  border-radius:6px;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio of Aprilmoon</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --card-bg: #1a1a1a;
+            --text-main: #d1d1d1;
+            --text-muted: #888888;
+            --border-color: #2a2a2a;
+            --accent-color: #c5a880;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: radial-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 0);
+            background-size: 24px 24px;
+            line-height: 1.6;
+        }
+
+        header {
+            text-align: center;
+            padding: 60px 20px 30px;
+            border-bottom: 1px solid var(--border-color);
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            color: #fff;
+            font-weight: normal;
+        }
+
+        .subtitle {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+        }
+
+        /* 主体容器 */
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        /* 时间轴卡片（结合1的风格与2的布局） */
+        .timeline-item {
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+        }
+
+        .timeline-top-row {
+            display: grid;
+            grid-template-columns: 120px 1fr 140px 100px;
+            gap: 15px;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+
+        .time {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .band {
+            font-size: 1.1rem;
+            color: #fff;
+            font-weight: 500;
+        }
+
+        .venue {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .btn-more {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--accent-color);
+            padding: 6px 14px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-radius: 4px;
+        }
+
+        .btn-more:hover {
+            border-color: var(--accent-color);
+            background: rgba(197, 168, 128, 0.05);
+        }
+
+        /* 缩略图样式 */
+        .thumb-wrap {
+            width: 100%;
+            margin-top: 15px;
+        }
+
+        .thumb {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 4px;
+            opacity: 0.9;
+        }
+
+        /* 弹窗遮罩 */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.92);
+            z-index: 999;
+            display: none;
+            overflow-y: auto;
+            padding: 40px 20px;
+        }
+
+        .modal-wrap {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 15px;
+        }
+
+        .modal-title {
+            font-size: 1.2rem;
+            color: #fff;
+            font-weight: normal;
+        }
+
+        .close {
+            color: var(--text-muted);
+            font-size: 28px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+
+        .close:hover {
+            color: #fff;
+        }
+
+        /* 瀑布流 masonry */
+        .waterfall {
+            column-count: 3;
+            column-gap: 15px;
+        }
+        @media(max-width: 960px) { .waterfall { column-count: 2; } }
+        @media(max-width: 550px) { .waterfall { column-count: 1; } }
+
+        .waterfall-item {
+            break-inside: avoid;
+            margin-bottom: 15px;
+        }
+
+        .waterfall-item img {
+            width: 100%;
+            display: block;
+            border-radius: 4px;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* 响应式调整适配小屏幕 */
+        @media(max-width: 768px) {
+            .timeline-top-row {
+                grid-template-columns: 1fr;
+                gap: 8px;
+            }
+        }
+    </style>
 </head>
 <body>
-<div class="container">
-  <h1>LIVE PHOTOGRAPHY</h1>
-  <div id="timeline"></div>
-</div>
 
-<div class="modal-overlay" id="modal">
-  <div class="modal-wrap">
-    <div class="modal-header">
-      <div class="modal-title" id="modal-title"></div>
-      <div class="close" id="close">×</div>
+    <header>
+        <h1>Portfolio of Aprilmoon</h1>
+        <div class="subtitle">在黑暗中跳动的心脏叫作月亮</div>
+    </header>
+
+    <div class="container" id="timeline"></div>
+
+    <!-- 弹窗结构 -->
+    <div class="modal-overlay" id="modal">
+        <div class="modal-wrap">
+            <div class="modal-header">
+                <div class="modal-title" id="modal-title"></div>
+                <div class="close" id="close">×</div>
+            </div>
+            <div class="waterfall" id="gallery"></div>
+        </div>
     </div>
-    <div class="waterfall" id="gallery"></div>
-  </div>
-</div>
+
+    <footer>
+        <p>&copy; 2026 Portfolio of Aprilmoon. All Rights Reserved.</p>
+    </footer>
 
 <script>
 // ======================
-// 全部演出列表，在这里修改！placeholder替换成图片直链
+// 演出列表：在此处管理您的演出及图片
+// 提示：如需添加多张图片，在 images 数组中继续用英文逗号分隔添加直链即可。
 // ======================
 const shows = [
-{
-    date:"2026‑08‑09",
-    band:"飞行冠军",
-    venue:"福州 Livehouse",
-    thumb:"https://i.postimg.cc/RZDHVkq3/IMG-20260819-184144.jpg",
-    images:["https://i.postimg.cc/RZDHVkq3/IMG-20260819-184144.jpg"]
-},
-{
-    date:"2026‑07‑27",
-    band:"来福乐队",
-    venue:"福州 Livehouse",
-    thumb:"placeholder",
-    images:["placeholder"]
-},
-{
-    date:"2026‑07‑05",
-    band:"花墙乐队",
-    venue:"福州 Livehouse（收官场）",
-    thumb:"placeholder",
-    images:["placeholder"]
-},
-{
-    date:"2026‑07‑04",
-    band:"败犬 pt.2",
-    venue:"福州 Livehouse",
-    thumb:"placeholder",
-    images:["placeholder"]
-},
-{
-    date:"2026‑07‑04",
-    band:"败犬 pt.1",
-    venue:"福州 Livehouse",
-    thumb:"placeholder",
-    images:["placeholder"]
-},
-{
-    date:"2026‑06‑29",
-    band:"老油条",
-    venue:"福州 Livehouse",
-    thumb:"placeholder",
-    images:["placeholder"]
-},
-{
-    date:"2026‑06‑27",
-    band:"落水泥人",
-    venue:"福州 Livehouse",
-    thumb:"placeholder",
-    images:["placeholder"]
-},
-{
-    date:"2026‑06‑27",
-    band:"波动卡带",
-    venue:"福州 Livehouse",
-    thumb:"placeholder",
-    images:["placeholder"]
-},
-{
-    date:"2026‑06‑21",
-    band:"始于明天",
-    venue:"福州 Livehouse",
-    thumb:"placeholder",
-    images:["placeholder"]
-},
-{
-    date:"2026‑06‑20",
-    band:"惊蛰",
-    venue:"福州 Livehouse",
-    thumb:"placeholder",
-    images:["placeholder"]
-},
-{
-    date:"2026‑06‑13",
-    band:"Whetherday",
-    venue:"福州 Livehouse",
-    thumb:"placeholder",
-    images:["placeholder"]
-},
-{
-    date:"2026‑05‑29",
-    band:"帆布小镇",
-    venue:"福州 Livehouse",
-    thumb:"placeholder",
-    images:["placeholder"]
-},
-{
-    date:"2026‑05‑23",
-    band:"秘密行动",
-    venue:"福州 Livehouse",
-    thumb:"placeholder",
-    images:["placeholder"]
-},
-{
-    date:"2026‑05‑22",
-    band:"东南不锈钢",
-    venue:"福州 Livehouse",
-    thumb:"placeholder",
-    images:["placeholder"]
-},
-{
-    date:"2026‑05‑21",
-    band:"性格缺失",
-    venue:"福州 Livehouse",
-    thumb:"placeholder",
-    images:["placeholder"]
-},
-{
-    date:"2026‑05‑16",
-    band:"风子",
-    venue:"福州 Livehouse",
-    thumb:"placeholder",
-    images:["placeholder"]
-},
-{
-    date:"2026‑05‑08",
-    band:"T.L.P.",
-    venue:"福州 Livehouse",
-    thumb:"placeholder",
-    images:["placeholder"]
-},
-{
-    date:"2026‑05‑03",
-    band:"水无游",
-    venue:"福州 Livehouse",
-    thumb:"placeholder",
-    images:["placeholder"]
-},
-{
-    date:"2026‑04‑18",
-    band:"时过夏末 · 雨是悲欢离合",
-    venue:"福州 Livehouse",
-    thumb:"placeholder",
-    images:["placeholder"]
-},
-{
-    date:"2026‑04‑12",
-    band:"粮仓乐队｜春日未鸣的花",
-    venue:"福州 Livehouse",
-    thumb:"placeholder",
-    images:["placeholder"]
-},
-{
-    date:"2026‑04‑05",
-    band:"TC乔安娜",
-    venue:"福州 Livehouse",
-    thumb:"placeholder",
-    images:["placeholder"]
-}
+    {
+        date: "2026-08-09",
+        band: "飞行冠军",
+        venue: "福州 Livehouse",
+        thumb: "https://i.postimg.cc/RZDHVkq3/IMG-20260819-184144.jpg",
+        images: [
+            "https://i.postimg.cc/RZDHVkq3/IMG-20260819-184144.jpg"
+        ]
+    },
+    {
+        date: "2026-07-27",
+        band: "来福乐队",
+        venue: "福州 Livehouse",
+        thumb: "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=1000&q=80",
+        images: [
+            "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=1000&q=80"
+        ]
+    },
+    {
+        date: "2026-07-05",
+        band: "花墙乐队",
+        venue: "福州 Livehouse",
+        thumb: "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=1000&q=80",
+        images: [
+            "https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=1000&q=80"
+        ]
+    },
+    {
+        date: "2026-07-04",
+        band: "败犬乐队",
+        venue: "福州 Livehouse",
+        thumb: "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=1000&q=80",
+        images: [
+            "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?auto=format&fit=crop&w=1000&q=80"
+        ]
+    },
+    {
+        date: "2026-06-29",
+        band: "老油条",
+        venue: "福州 Livehouse",
+        thumb: "https://images.unsplash.com/photo-1526478806334-5fd488fcaabc?auto=format&fit=crop&w=1000&q=80",
+        images: [
+            "https://images.unsplash.com/photo-1526478806334-5fd488fcaabc?auto=format&fit=crop&w=1000&q=80"
+        ]
+    },
+    {
+        date: "2026-05-29",
+        band: "帆布小镇",
+        venue: "福州 Livehouse",
+        thumb: "https://images.unsplash.com/photo-1465847899084-d164df4dedc6?auto=format&fit=crop&w=1000&q=80",
+        images: [
+            "https://images.unsplash.com/photo-1465847899084-d164df4dedc6?auto=format&fit=crop&w=1000&q=80"
+        ]
+    }
 ];
 
 const timelineEl = document.getElementById('timeline');
+
 shows.forEach((item, idx) => {
-  const div = document.createElement('div');
-  div.className = 'timeline-item';
-  div.innerHTML = `
-    <div class="timeline-top-row">
-      <div class="time">${item.date}</div>
-      <div class="band">${item.band}</div>
-      <div class="venue">${item.venue}</div>
-      <div>
-        <button class="btn-more" data-index="${idx}">More</button>
-      </div>
-    </div>
-    <div class="thumb-wrap">
-        < img class="thumb" src="${item.thumb}" loading="lazy">
-    </div>
-  `;
-  timelineEl.appendChild(div);
-})
+    const div = document.createElement('div');
+    div.className = 'timeline-item';
+    div.innerHTML = `
+        <div class="timeline-top-row">
+            <div class="time">${item.date}</div>
+            <div class="band">${item.band}</div>
+            <div class="venue">${item.venue}</div>
+            <div>
+                <button class="btn-more" data-index="${idx}">More</button>
+            </div>
+        </div>
+        <div class="thumb-wrap">
+            <img class="thumb" src="${item.thumb}" loading="lazy" alt="${item.band}">
+        </div>
+    `;
+    timelineEl.appendChild(div);
+});
 
 const modal = document.getElementById('modal');
 const gallery = document.getElementById('gallery');
 const modalTitle = document.getElementById('modal-title');
 const closeBtn = document.getElementById('close');
 
+// 点击 More 弹窗显示大图
 document.addEventListener('click', function(e){
-  if(e.target.classList.contains('btn-more')){
-    const idx = parseInt(e.target.getAttribute('data-index'));
-    const show = shows[idx];
-    modalTitle.textContent = `${show.band} — ${show.date} · ${show.venue}`;
-    gallery.innerHTML = '';
-    show.images.forEach(src => {
-      const itemDiv = document.createElement('div');
-      itemDiv.className = 'waterfall-item';
-      itemDiv.innerHTML = `< img src="${src}" loading="lazy">`;
-      gallery.appendChild(itemDiv);
-    });
-    modal.style.display = 'block';
-    document.body.style.overflow = 'hidden';
-  }
-})
+    if(e.target.classList.contains('btn-more')){
+        const idx = parseInt(e.target.getAttribute('data-index'));
+        const show = shows[idx];
+        modalTitle.textContent = `${show.band} — ${show.date} · ${show.venue}`;
+        gallery.innerHTML = '';
+        
+        show.images.forEach(src => {
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'waterfall-item';
+            itemDiv.innerHTML = `<img src="${src}" loading="lazy" alt="live photo">`;
+            gallery.appendChild(itemDiv);
+        });
+        
+        modal.style.display = 'block';
+        document.body.style.overflow = 'hidden';
+    }
+});
 
+// 关闭弹窗
 closeBtn.onclick = () => {
-  modal.style.display = 'none';
-  document.body.style.overflow = '';
-}
-modal.onclick = (e) => {
-  if(e.target === modal){
     modal.style.display = 'none';
     document.body.style.overflow = '';
-  }
-}
+};
+
+modal.onclick = (e) => {
+    if(e.target === modal){
+        modal.style.display = 'none';
+        document.body.style.overflow = '';
+    }
+};
 </script>
 </body>
 </html>
